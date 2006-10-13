@@ -50,7 +50,7 @@ Sys::Utmp - Object(ish) Interface to UTMP files.
   use Sys::Utmp;
 
   my $utmp = Sys::Utmp->new();
-  
+
   while ( my $utent =  $utmp->getutent() )
   {
      if ( $utent->user_process )
@@ -67,7 +67,7 @@ Sys::Utmp provides a vaguely object oriented interface to the Unix user
 accounting file ( usually /etc/utmp ).  Whilst it would prefer to use the
 getutent() function from the systems C libraries it will attempt to
 provide its own if they are missing.
- 
+
 This may not be the module that you are looking for - there is a User::Utmp
 which provides a different procedural interface and may well be more complete
 for your purposes.
@@ -359,7 +359,7 @@ These constants are exportable under the tag ':constants':
      RUN_LVL
      USER_PROCESS
 
-=item BUGS
+=head1 BUGS
 
 Probably.  This module has been tested on Linux, Solaris, FreeBSD ,SCO 
 Openserver and SCO UnixWare and found to work on those platforms.  

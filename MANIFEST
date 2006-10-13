@@ -1,8 +1,10 @@
 Changes
 MANIFEST
+MANIFEST.SKIP
 Makefile.PL
 README
 Utmp.pm
 Utmp.xs
 test.pl
 eg/pwho
+META.yml                                 Module meta-data (added by MakeMaker)
