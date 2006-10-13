@@ -17,3 +17,11 @@ Revision history for Perl extension Sys::Utmp.
         - Tainted ut_host as DNS might not be in our control.
         - utmpname() was not backward compatible to 5.005
         - added eg/pwho
+
+1.6 Fri Oct 13 16:00:24 BST 2006
+        - Changed layout of source code
+        - Fixed warnings with new gcc/perl
+        - UT_* constants weren't actually working
+        - Tainting wasn't working
+        - Improved test coverage
+        - Removed useless const code in .xs

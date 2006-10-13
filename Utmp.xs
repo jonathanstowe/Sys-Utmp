@@ -121,247 +121,57 @@ struct utmp *getutent(void)
 
 #endif
 
-static int
-not_here(char *s)
-{
-    croak("%s not implemented on this architecture", s);
-    return -1;
-}
-
-static double
-constant__HAVE_UT_T(char *name, int len, int arg)
-{
-    switch (name[10 + 0]) {
-    case 'V':
-	if (strEQ(name + 10, "V")) {	/* _HAVE_UT_T removed */
-#ifdef _HAVE_UT_TV
-	    return _HAVE_UT_TV;
-#else
-	    goto not_there;
-#endif
-	}
-    case 'Y':
-	if (strEQ(name + 10, "YPE")) {	/* _HAVE_UT_T removed */
-#ifdef _HAVE_UT_TYPE
-	    return _HAVE_UT_TYPE;
-#else
-	    goto not_there;
-#endif
-	}
-    }
-    errno = EINVAL;
-    return 0;
-
-not_there:
-    errno = ENOENT;
-    return 0;
-}
-
-static double
-constant__(char *name, int len, int arg)
-{
-    if (1 + 8 >= len ) {
-	errno = EINVAL;
-	return 0;
-    }
-    switch (name[1 + 8]) {
-    case 'H':
-	if (strEQ(name + 1, "HAVE_UT_HOST")) {	/* _ removed */
-#ifdef _HAVE_UT_HOST
-	    return _HAVE_UT_HOST;
-#else
-	    goto not_there;
-#endif
-	}
-    case 'I':
-	if (strEQ(name + 1, "HAVE_UT_ID")) {	/* _ removed */
-#ifdef _HAVE_UT_ID
-	    return _HAVE_UT_ID;
-#else
-	    goto not_there;
-#endif
-	}
-    case 'P':
-	if (strEQ(name + 1, "HAVE_UT_PID")) {	/* _ removed */
-#ifdef _HAVE_UT_PID
-	    return _HAVE_UT_PID;
-#else
-	    goto not_there;
-#endif
-	}
-    case 'T':
-	if (!strnEQ(name + 1,"HAVE_UT_", 8))
-	    break;
-	return constant__HAVE_UT_T(name, len, arg);
-    }
-    errno = EINVAL;
-    return 0;
-
-not_there:
-    errno = ENOENT;
-    return 0;
-}
-
-static double
-constant_UT(char *name, int len, int arg)
-{
-    if (2 + 1 >= len ) {
-	errno = EINVAL;
-	return 0;
-    }
-    switch (name[2 + 1]) {
-    case 'H':
-	if (strEQ(name + 2, "_HOSTSIZE")) {	/* UT removed */
-#ifdef UT_HOSTSIZE
-	    return UT_HOSTSIZE;
-#else
-	    goto not_there;
-#endif
-	}
-    case 'L':
-	if (strEQ(name + 2, "_LINESIZE")) {	/* UT removed */
-#ifdef UT_LINESIZE
-	    return UT_LINESIZE;
-#else
-	    goto not_there;
-#endif
-	}
-    case 'N':
-	if (strEQ(name + 2, "_NAMESIZE")) {	/* UT removed */
-#ifdef UT_NAMESIZE
-	    return UT_NAMESIZE;
-#else
-	    goto not_there;
-#endif
-	}
-    case 'U':
-	if (strEQ(name + 2, "_UNKNOWN")) {	/* UT removed */
-#ifdef UT_UNKNOWN
-	    return UT_UNKNOWN;
-#else
-	    goto not_there;
-#endif
-	}
-    }
-    errno = EINVAL;
-    return 0;
-
-not_there:
-    errno = ENOENT;
-    return 0;
-}
-
-static double
-constant_U(char *name, int len, int arg)
-{
-    switch (name[1 + 0]) {
-    case 'S':
-	if (strEQ(name + 1, "SER_PROCESS")) {	/* U removed */
-#ifdef USER_PROCESS
-	    return USER_PROCESS;
-#else
-	    goto not_there;
-#endif
-	}
-    case 'T':
-	return constant_UT(name, len, arg);
-    }
-    errno = EINVAL;
-    return 0;
-
-not_there:
-    errno = ENOENT;
-    return 0;
-}
 
 static double
 constant(char *name, int len, int arg)
 {
-    errno = 0;
-    switch (name[0 + 0]) {
-    case 'A':
-	if (strEQ(name + 0, "ACCOUNTING")) {	/*  removed */
-#ifdef ACCOUNTING
+   errno = 0;
+	if (strEQ(name, "ACCOUNTING")) 
+   {
 	    return ACCOUNTING;
-#else
-	    goto not_there;
-#endif
 	}
-    case 'B':
-	if (strEQ(name + 0, "BOOT_TIME")) {	/*  removed */
-#ifdef BOOT_TIME
+   else if (strEQ(name, "BOOT_TIME")) 
+   {
 	    return BOOT_TIME;
-#else
-	    goto not_there;
-#endif
 	}
-    case 'D':
-	if (strEQ(name + 0, "DEAD_PROCESS")) {	/*  removed */
-#ifdef DEAD_PROCESS
+   else if (strEQ(name, "DEAD_PROCESS")) 
+   {
 	    return DEAD_PROCESS;
-#else
-	    goto not_there;
-#endif
 	}
-    case 'E':
-	if (strEQ(name + 0, "EMPTY")) {	/*  removed */
-#ifdef EMPTY
+   else if (strEQ(name, "EMPTY")) 
+   {
 	    return EMPTY;
-#else
-	    goto not_there;
-#endif
 	}
-    case 'I':
-	if (strEQ(name + 0, "INIT_PROCESS")) {	/*  removed */
-#ifdef INIT_PROCESS
+   else if (strEQ(name, "INIT_PROCESS")) 
+   {
 	    return INIT_PROCESS;
-#else
-	    goto not_there;
-#endif
 	}
-    case 'L':
-	if (strEQ(name + 0, "LOGIN_PROCESS")) {	/*  removed */
-#ifdef LOGIN_PROCESS
+   else if (strEQ(name, "LOGIN_PROCESS")) 
+   {
 	    return LOGIN_PROCESS;
-#else
-	    goto not_there;
-#endif
 	}
-    case 'N':
-	if (strEQ(name + 0, "NEW_TIME")) {	/*  removed */
-#ifdef NEW_TIME
+   else if (strEQ(name, "NEW_TIME")) 
+   {	
 	    return NEW_TIME;
-#else
-	    goto not_there;
-#endif
 	}
-    case 'O':
-	if (strEQ(name + 0, "OLD_TIME")) {	/*  removed */
-#ifdef OLD_TIME
+   else if (strEQ(name, "OLD_TIME")) 
+   {
 	    return OLD_TIME;
-#else
-	    goto not_there;
-#endif
 	}
-    case 'R':
-	if (strEQ(name + 0, "RUN_LVL")) {	/*  removed */
-#ifdef RUN_LVL
+   else if (strEQ(name, "RUN_LVL")) 
+   {	
 	    return RUN_LVL;
-#else
-	    goto not_there;
-#endif
 	}
-    case 'U':
-	return constant_U(name, len, arg);
-    case '_':
-	return constant__(name, len, arg);
-    }
+	if (strEQ(name, "USER_PROCESS")) 
+   {
+	    return USER_PROCESS;
+	}
+   else
+   {
     errno = EINVAL;
     return 0;
+   }
 
-not_there:
-    errno = ENOENT;
-    return 0;
 }
 
 
@@ -399,6 +209,8 @@ SV *self
      static struct utmp *utent;
      static char ut_host[UT_HOSTSIZE];
 
+     HV *self_hash;
+
      SV *sv_ut_user;
      SV *sv_ut_id;
      SV *sv_ut_line;
@@ -406,6 +218,11 @@ SV *self
      SV *sv_ut_type;
      SV *sv_ut_host;
      SV *sv_ut_tv;
+
+     if(!SvROK(self)) 
+        croak("Must be called as an object method");
+
+     self_hash = (HV *)SvRV(self);
 
      utent = getutent();
 
@@ -432,9 +249,9 @@ SV *self
        ut_tv = (IV)utent->ut_time;
 #endif
 #ifdef _HAVE_UT_HOST
-       strcpy(ut_host, utent->ut_host);
+       strncpy(ut_host, utent->ut_host,UT_HOSTSIZE);
 #else
-       strcpy(ut_host, "");
+       strcpy(ut_host, "",1);
 #endif
 
 
@@ -447,7 +264,8 @@ SV *self
        sv_ut_tv   = newSViv(ut_tv);
 
 
-       SvTAINT(sv_ut_host);
+       SvTAINTED_on(sv_ut_user);
+       SvTAINTED_on(sv_ut_host); 
 
        if ( GIMME_V == G_ARRAY )
        {
@@ -500,12 +318,23 @@ void
 setutent(self)
 SV *self
    PPCODE:
+    HV *self_hash;
+
+    if(!SvROK(self)) 
+        croak("Must be called as an object method");
+
+    self_hash = (HV *)SvRV(self);
     setutent();
 
 void
 endutent(self)
 SV *self
    PPCODE:
+    HV *self_hash;
+
+    if(!SvROK(self)) 
+        croak("Must be called as an object method");
+    self_hash = (HV *)SvRV(self);
     endutent();
 
 void
@@ -514,6 +343,11 @@ SV *self
 SV *filename
    PPCODE:
      char *ff;
+     HV *self_hash;
+
+    if(!SvROK(self)) 
+        croak("Must be called as an object method");
+     self_hash = (HV *)SvRV(self);
 
      ff = SvPV(filename,PL_na);
      utmpname(ff);
@@ -522,4 +356,10 @@ void
 DESTROY(self)
 SV *self
    PPCODE:
+     HV *self_hash;
+
+    if(!SvROK(self)) 
+        croak("Must be called as an object method");
+
+     self_hash = (HV *)SvRV(self);
      endutent();

@@ -27,10 +27,12 @@ that it should try to supply them itself then you might try :
 
 which will force the module to use its built in versions of the functions.
 
+At version 1.6 Test::More is also required for the tests.
+
 COPYRIGHT AND LICENCE
 
 Copyright Netscalibur UK 2001.
-Copyright Jonathan Stowe 2001.
+Copyright Jonathan Stowe 2001 - 2006
 
 This software carries no warranty either express or implied.
 

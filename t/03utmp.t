@@ -1,6 +1,7 @@
 use Test;
+use strict;
 BEGIN { plan tests => 7 };
-use Sys::Utmp ;
+use Sys::Utmp qw(:fields);
 ok(1); 
 
 # test 
@@ -21,6 +22,7 @@ ok(1);
    };
    if ( $@ )
    {
+     print $@;
      ok(0);
    }
  
@@ -53,6 +55,7 @@ ok(1);
    };
    if ( $@ )
    {
+     print $@;
      ok(0);
    }
  

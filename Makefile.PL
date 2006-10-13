@@ -25,11 +25,11 @@ else
 
 WriteMakefile(
     'NAME'		=> 'Sys::Utmp',
-    'VERSION_FROM'	=> 'Utmp.pm',
-    'PREREQ_PM'		=> {},
+    'VERSION_FROM'	=> 'lib/Sys/Utmp.pm',
+    'PREREQ_PM'		=> {Test::More => 0 },
     ($] >= 5.005 ?    
-      (ABSTRACT_FROM => 'Utmp.pm',
-       AUTHOR     => 'Jonathan Stowe <jonathan.stowe@netscalibur.co.uk>') : ()),
+      (ABSTRACT_FROM => 'lib/Sys/Utmp.pm',
+       AUTHOR     => 'Jonathan Stowe <jns@gellyfish>') : ()),
     'LIBS'		=> ['-lc'],
     'DEFINE'		=> $define,
     'INC'		=> '' 
