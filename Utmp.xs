@@ -4,8 +4,11 @@
 
 #include <utmp.h>
 
-#ifdef NOUTFUNCS
+#ifdef _AIX
+#define _HAVE_UT_HOST	1
+#endif
 
+#ifdef NOUTFUNCS
 #include <stdlib.h>
 #include <unistd.h>
 #include <time.h>
@@ -14,6 +17,7 @@
 #include <sys/types.h>
 #include <sys/stat.h>
 #include <fcntl.h>
+
 
 #ifdef BSD
 #define _NO_UT_ID
@@ -43,22 +47,11 @@
 #define ACCOUNTING      9
 #endif
 
-
 /*
     It is almost certain that if these are not defined the fields they are
     for are not present or this is BSD :)
 */
 
-
-#ifndef UT_LINESIZE
-# define UT_LINESIZE 32
-#endif
-#ifndef UT_NAMESIZE
-# define UT_NAMESIZE 32
-#endif 
-#ifndef UT_HOSTSIZE
-# define UT_HOSTSIZE
-#endif
 
 static int ut_fd = -1;
 
@@ -208,7 +201,7 @@ SV *self
      static SV *ut_ref;
      static char *_ut_id;
      static struct utmp *utent;
-     static char ut_host[UT_HOSTSIZE];
+     static char ut_host[sizeof(utent->ut_host)];
 
 
      SV *sv_ut_user;
@@ -248,7 +241,7 @@ SV *self
        ut_tv = (IV)utent->ut_time;
 #endif
 #ifdef _HAVE_UT_HOST
-       strncpy(ut_host, utent->ut_host,UT_HOSTSIZE);
+       strncpy(ut_host, utent->ut_host,sizeof(utent->ut_host));
 #else
        strncpy(ut_host, "",1);
 #endif
