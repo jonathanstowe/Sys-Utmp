@@ -19,6 +19,7 @@
 #define _NO_UT_ID
 #define _NO_UT_TYPE
 #define _NO_UT_PID
+#define _HAVE_UT_HOST
 #define ut_user ut_name
 #endif
 
@@ -209,7 +210,6 @@ SV *self
      static struct utmp *utent;
      static char ut_host[UT_HOSTSIZE];
 
-     HV *self_hash;
 
      SV *sv_ut_user;
      SV *sv_ut_id;
@@ -222,7 +222,6 @@ SV *self
      if(!SvROK(self)) 
         croak("Must be called as an object method");
 
-     self_hash = (HV *)SvRV(self);
 
      utent = getutent();
 
@@ -251,7 +250,7 @@ SV *self
 #ifdef _HAVE_UT_HOST
        strncpy(ut_host, utent->ut_host,UT_HOSTSIZE);
 #else
-       strcpy(ut_host, "",1);
+       strncpy(ut_host, "",1);
 #endif
 
 
@@ -318,23 +317,19 @@ void
 setutent(self)
 SV *self
    PPCODE:
-    HV *self_hash;
 
     if(!SvROK(self)) 
         croak("Must be called as an object method");
 
-    self_hash = (HV *)SvRV(self);
     setutent();
 
 void
 endutent(self)
 SV *self
    PPCODE:
-    HV *self_hash;
 
     if(!SvROK(self)) 
         croak("Must be called as an object method");
-    self_hash = (HV *)SvRV(self);
     endutent();
 
 void
@@ -343,11 +338,9 @@ SV *self
 SV *filename
    PPCODE:
      char *ff;
-     HV *self_hash;
 
     if(!SvROK(self)) 
         croak("Must be called as an object method");
-     self_hash = (HV *)SvRV(self);
 
      ff = SvPV(filename,PL_na);
      utmpname(ff);
@@ -356,10 +349,8 @@ void
 DESTROY(self)
 SV *self
    PPCODE:
-     HV *self_hash;
 
     if(!SvROK(self)) 
         croak("Must be called as an object method");
 
-     self_hash = (HV *)SvRV(self);
      endutent();
