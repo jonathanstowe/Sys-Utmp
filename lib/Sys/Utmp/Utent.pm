@@ -206,11 +206,11 @@ then please contact the author including if appropriate your /usr/include/utmp.h
 
 =head1 AUTHOR
 
-Jonathan Stowe, E<lt>jns@gellyfish.comE<gt>
+Jonathan Stowe, E<lt>jns@gellyfish.co.ukE<gt>
 
 =head1 LICENCE
 
-This Software is Copyright Jonathan Stowe 2001-2006
+This Software is Copyright Jonathan Stowe 2001-2013
 
 This Software is published as-is with no warranty express or implied.
 
@@ -219,6 +219,6 @@ Perl itself.
 
 =head1 SEE ALSO
 
-L<perl>. L<Sys::Utmp::Utent>
+L<perl>. L<Sys::Utmp>
 
 =cut

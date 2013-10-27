@@ -13,31 +13,6 @@
 #*                                                                           *
 #*                                                                           *
 #*****************************************************************************
-#*                                                                           *
-#*      $Log: Utmp.pm,v $
-#*      Revision 1.5  2004/03/02 20:28:08  jonathan
-#*      Put back in CVS
-#*
-#*      Revision 1.5  2001/09/14 07:28:51  gellyfish
-#*      * Fixed coredump in PL_sv_free
-#*      * Tainted ut_host
-#*      * fixed backward compatibillity problem
-#*
-#*      Revision 1.4  2001/09/10 07:16:10  gellyfish
-#*      Fixed memory leakage in getutent()
-#*
-#*      Revision 1.3  2001/03/27 06:55:36  gellyfish
-#*      Added utmpname()
-#*
-#*      Revision 1.2  2001/02/12 15:05:31  gellyfish
-#*      Added BSD support
-#*
-#*      Revision 1.1  2001/02/09 22:27:30  gellyfish
-#*      Initial revision
-#*
-#*                                                                           *
-#*                                                                           *
-#*****************************************************************************
 
 package Sys::Utmp;
 
@@ -158,7 +133,7 @@ BEGIN
    @EXPORT_OK = ( @{ $EXPORT_TAGS{'constants'} }, @{ $EXPORT_TAGS{'fields'}} );
 }
 
-$VERSION = '1.6';
+$VERSION = '1.7';
 
 sub new 
 {
@@ -249,14 +224,18 @@ Openserver and SCO UnixWare and found to work on those platforms.
 If you have difficulty building the module or it doesnt behave as expected
 then please contact the author including if appropriate your /usr/include/utmp.h
 
+Patches to make this work better on any platform are always welcome. The source
+is managed at https://github.com/jonathanstowe/Sys-Utmp so feel free to fork and
+send a pull request.
+
 =head1 AUTHOR
 
-Jonathan Stowe, E<lt>jns@gellyfish.comE<gt>
+Jonathan Stowe, E<lt>jns@gellyfish.co.ukE<gt>
 
 =head1 LICENCE
 
 This Software is Copyright Netscalibur UK 2001,  
-                           Jonathan Stowe 2001-2006
+                           Jonathan Stowe 2001-2013
 
 This Software is published as-is with no warranty express or implied.
 
