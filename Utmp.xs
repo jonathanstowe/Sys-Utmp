@@ -5,7 +5,7 @@
 #include <utmp.h>
 
 #ifdef _AIX
-#define _HAVE_UT_HOST	1
+#define _HAVE_UT_HOST    1
 #endif
 
 #ifdef NOUTFUNCS
@@ -57,17 +57,13 @@ static int ut_fd = -1;
 
 static char _ut_name[] = _PATH_UTMP;
 
-void utmpname(char *filename)
-{
+void utmpname(char *filename) {
    strcpy(_ut_name, filename);
 }
 
-void setutent(void)
-{
-    if (ut_fd < 0)
-    {
-       if ((ut_fd = open(_ut_name, O_RDONLY)) < 0) 
-       {
+void setutent(void) {
+    if (ut_fd < 0) {
+       if ((ut_fd = open(_ut_name, O_RDONLY)) < 0) {
             croak("Can't open %s",_ut_name);
         }
     }
@@ -75,38 +71,30 @@ void setutent(void)
     lseek(ut_fd, (off_t) 0, SEEK_SET);
 }
 
-void endutent(void)
-{
-    if (ut_fd > 0)
-    {
+void endutent(void) {
+    if (ut_fd > 0) {
         close(ut_fd);
     }
 
     ut_fd = -1;
 }
 
-struct utmp *getutent(void) 
-{
+struct utmp *getutent(void) {
     static struct utmp s_utmp;
     int readval;
 
-    if (ut_fd < 0)
-    {
+    if (ut_fd < 0) {
         setutent();
     }
 
-    if ((readval = read(ut_fd, &s_utmp, sizeof(s_utmp))) < sizeof(s_utmp))
-    {
-        if (readval == 0)
-        {
+    if ((readval = read(ut_fd, &s_utmp, sizeof(s_utmp))) < sizeof(s_utmp)) {
+        if (readval == 0) {
             return NULL;
         }
-        else if (readval < 0) 
-        {
+        else if (readval < 0) {
             croak("Error reading %s", _ut_name);
-        } 
-        else 
-        {
+        }
+        else {
             croak("Partial record in %s [%d bytes]", _ut_name, readval );
         }
     }
@@ -119,57 +107,45 @@ struct utmp *getutent(void)
 static double
 constant(char *name, int len, int arg)
 {
-   errno = 0;
-	if (strEQ(name, "ACCOUNTING")) 
-   {
-	    return ACCOUNTING;
-	}
-   else if (strEQ(name, "BOOT_TIME")) 
-   {
-	    return BOOT_TIME;
-	}
-   else if (strEQ(name, "DEAD_PROCESS")) 
-   {
-	    return DEAD_PROCESS;
-	}
-   else if (strEQ(name, "EMPTY")) 
-   {
-	    return EMPTY;
-	}
-   else if (strEQ(name, "INIT_PROCESS")) 
-   {
-	    return INIT_PROCESS;
-	}
-   else if (strEQ(name, "LOGIN_PROCESS")) 
-   {
-	    return LOGIN_PROCESS;
-	}
-   else if (strEQ(name, "NEW_TIME")) 
-   {	
-	    return NEW_TIME;
-	}
-   else if (strEQ(name, "OLD_TIME")) 
-   {
-	    return OLD_TIME;
-	}
-   else if (strEQ(name, "RUN_LVL")) 
-   {	
-	    return RUN_LVL;
-	}
-	if (strEQ(name, "USER_PROCESS")) 
-   {
-	    return USER_PROCESS;
-	}
-   else
-   {
-    errno = EINVAL;
-    return 0;
-   }
-
+    errno = 0;
+    if (strEQ(name, "ACCOUNTING")) {
+        return ACCOUNTING;
+    }
+    else if (strEQ(name, "BOOT_TIME")) {
+        return BOOT_TIME;
+    }
+    else if (strEQ(name, "DEAD_PROCESS")) {
+        return DEAD_PROCESS;
+    }
+    else if (strEQ(name, "EMPTY")) {
+        return EMPTY;
+    }
+    else if (strEQ(name, "INIT_PROCESS")) {
+        return INIT_PROCESS;
+    }
+    else if (strEQ(name, "LOGIN_PROCESS")) {
+        return LOGIN_PROCESS;
+    }
+    else if (strEQ(name, "NEW_TIME")) {
+        return NEW_TIME;
+    }
+    else if (strEQ(name, "OLD_TIME")) {
+        return OLD_TIME;
+    }
+    else if (strEQ(name, "RUN_LVL")) {
+        return RUN_LVL;
+    }
+    if (strEQ(name, "USER_PROCESS")) {
+        return USER_PROCESS;
+    }
+    else {
+        errno = EINVAL;
+        return 0;
+    }
 }
 
 
-MODULE = Sys::Utmp		PACKAGE = Sys::Utmp		
+MODULE = Sys::Utmp        PACKAGE = Sys::Utmp
 
 PROTOTYPES: DISABLE
 
@@ -177,15 +153,15 @@ PROTOTYPES: DISABLE
 double
 constant(sv,arg)
     PREINIT:
-	STRLEN		len;
+        STRLEN        len;
     INPUT:
-	SV *		sv
-	char *		s = SvPV(sv, len);
-	int		arg
+        SV      * sv
+        char    * s = SvPV(sv, len);
+        int       arg
     CODE:
-	RETVAL = constant(s,len,arg);
+        RETVAL = constant(s,len,arg);
     OUTPUT:
-	RETVAL
+        RETVAL
 
 
 
@@ -197,7 +173,7 @@ SV *self
      static HV *meth_stash;
      static IV ut_tv;
      static IV _ut_pid;
-     static IV _ut_type; 
+     static IV _ut_type;
      static SV *ut_ref;
      static char *_ut_id;
      static struct utmp *utent;
@@ -212,14 +188,13 @@ SV *self
      SV *sv_ut_host;
      SV *sv_ut_tv;
 
-     if(!SvROK(self)) 
+     if(!SvROK(self))
         croak("Must be called as an object method");
 
 
      utent = getutent();
 
-     if ( utent )
-     {
+     if ( utent ) {
 #ifdef _NO_UT_ID
        _ut_id = "";
 #else
@@ -231,7 +206,7 @@ SV *self
        _ut_type = utent->ut_type;
 #endif
 #ifdef _NO_UT_PID
-       _ut_pid = -1; 
+       _ut_pid = -1;
 #else
        _ut_pid = utent->ut_pid;
 #endif
@@ -257,10 +232,9 @@ SV *self
 
 
        SvTAINTED_on(sv_ut_user);
-       SvTAINTED_on(sv_ut_host); 
+       SvTAINTED_on(sv_ut_host);
 
-       if ( GIMME_V == G_ARRAY )
-       {
+       if ( GIMME_V == G_ARRAY ) {
          sv_ut_user = sv_2mortal(sv_ut_user);
          sv_ut_id   = sv_2mortal(sv_ut_id);
          sv_ut_line = sv_2mortal(sv_ut_line);
@@ -278,8 +252,7 @@ SV *self
          XPUSHs(sv_ut_tv);
 
        }
-       else if ( GIMME_V == G_SCALAR )
-       {
+       else if ( GIMME_V == G_SCALAR ) {
          ut = newAV();
          av_push(ut,sv_ut_user);
          av_push(ut,sv_ut_id);
@@ -294,13 +267,11 @@ SV *self
          sv_bless(ut_ref, meth_stash);
          XPUSHs(sv_2mortal(ut_ref));
        }
-       else
-       {
+       else {
           XSRETURN_EMPTY;
        }
      }
-     else
-     {
+     else {
         XSRETURN_EMPTY;
      }
 
@@ -311,7 +282,7 @@ setutent(self)
 SV *self
    PPCODE:
 
-    if(!SvROK(self)) 
+    if(!SvROK(self))
         croak("Must be called as an object method");
 
     setutent();
@@ -321,7 +292,7 @@ endutent(self)
 SV *self
    PPCODE:
 
-    if(!SvROK(self)) 
+    if(!SvROK(self))
         croak("Must be called as an object method");
     endutent();
 
@@ -332,7 +303,7 @@ SV *filename
    PPCODE:
      char *ff;
 
-    if(!SvROK(self)) 
+    if(!SvROK(self))
         croak("Must be called as an object method");
 
      ff = SvPV(filename,PL_na);
@@ -343,7 +314,7 @@ DESTROY(self)
 SV *self
    PPCODE:
 
-    if(!SvROK(self)) 
+    if(!SvROK(self))
         croak("Must be called as an object method");
 
      endutent();
