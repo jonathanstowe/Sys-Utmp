@@ -8,29 +8,6 @@
 #define _HAVE_UT_HOST    1
 #endif
 
-#ifdef NOUTFUNCS
-#include <stdlib.h>
-#include <unistd.h>
-#include <time.h>
-#include <string.h>
-#include <stdio.h>
-#include <sys/types.h>
-#include <sys/stat.h>
-#include <fcntl.h>
-
-
-#ifdef BSD
-#define _NO_UT_ID
-#define _NO_UT_TYPE
-#define _NO_UT_PID
-#define _HAVE_UT_HOST
-#define ut_user ut_name
-#endif
-
-/*
-   define these so it still works as documented :)
-*/
-
 #ifndef USER_PROCESS
 #define EMPTY           0       /* No valid user accounting information.  */
 
@@ -46,6 +23,31 @@
 
 #define ACCOUNTING      9
 #endif
+
+#ifdef BSD
+#define _NO_UT_ID
+#define _NO_UT_TYPE
+#define _NO_UT_PID
+#define _HAVE_UT_HOST
+#define ut_user ut_name
+#endif
+
+#ifdef NOUTFUNCS
+#include <stdlib.h>
+#include <unistd.h>
+#include <time.h>
+#include <string.h>
+#include <stdio.h>
+#include <sys/types.h>
+#include <sys/stat.h>
+#include <fcntl.h>
+
+
+
+/*
+   define these so it still works as documented :)
+*/
+
 
 /*
     It is almost certain that if these are not defined the fields they are
