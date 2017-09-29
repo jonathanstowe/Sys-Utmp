@@ -89,26 +89,17 @@ getutent() - it is recommended that endutent() is called first.
 =cut
 
 use strict;
-use Carp;
+use warnings;
+use Carp qw(croak);
 
 require Exporter;
 require DynaLoader;
 
-use vars qw(
-            @ISA
-            %EXPORT_TAGS
-            @EXPORT_OK
-            @EXPORT
-            $VERSION
-            $AUTOLOAD
-            @constants
-           );
-
-@ISA = qw(Exporter DynaLoader);
+use base qw(Exporter DynaLoader);
 
 BEGIN
 {
-   @constants = qw(
+   our @constants = qw(
                    ACCOUNTING
                    BOOT_TIME
                    DEAD_PROCESS
@@ -121,19 +112,20 @@ BEGIN
                    USER_PROCESS
                   );
 }
+
 use Sys::Utmp::Utent;
 
 BEGIN
 {
-   %EXPORT_TAGS = (  
-                    'constants' => [ @constants ],
+   our %EXPORT_TAGS = (  
+                    'constants' => [ @Sys::Utmp::constants ],
                     'fields'    => [ @Sys::Utmp::Utent::EXPORT]
                   );
 
-   @EXPORT_OK = ( @{ $EXPORT_TAGS{'constants'} }, @{ $EXPORT_TAGS{'fields'}} );
+   our @EXPORT_OK = ( @{ $EXPORT_TAGS{'constants'} }, @{ $EXPORT_TAGS{'fields'}} );
 }
 
-$VERSION = '1.7';
+our $VERSION = '1.7';
 
 sub new 
 {
@@ -153,6 +145,7 @@ sub new
   return $self;
 }
 
+our $AUTOLOAD;
 
 sub AUTOLOAD 
 {
