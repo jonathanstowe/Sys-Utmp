@@ -125,7 +125,7 @@ BEGIN
    our @EXPORT_OK = ( @{ $EXPORT_TAGS{'constants'} }, @{ $EXPORT_TAGS{'fields'}} );
 }
 
-our $VERSION = '1.7';
+our $VERSION = '1.8';
 
 sub new {
     my ( $proto, %args ) = @_;
