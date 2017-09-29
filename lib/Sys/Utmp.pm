@@ -127,28 +127,22 @@ BEGIN
 
 our $VERSION = '1.7';
 
-sub new 
-{
-  my ( $proto, %args ) = @_;
+sub new {
+    my ( $proto, %args ) = @_;
 
-  my $self = {};
+    my $self = {};
+    my $class = ref($proto) || $proto;
+    bless $self, $class;
 
-  my $class = ref($proto) || $proto;
-
-  bless $self, $class;
-
-  if ( exists $args{Filename} and -s $args{Filename} )
-  {
-    $self->utmpname($args{Filename});
-  }
-  
-  return $self;
+    if ( exists $args{Filename} and -s $args{Filename} ) {
+        $self->utmpname($args{Filename});
+    }
+    return $self;
 }
 
 our $AUTOLOAD;
 
-sub AUTOLOAD 
-{
+sub AUTOLOAD {
     my ( $self ) = @_;
 
     my $constname;
@@ -157,13 +151,12 @@ sub AUTOLOAD
     ($constname = $AUTOLOAD) =~ s/.*:://;
     croak "& not defined" if $constname eq 'constant';
     my $val = constant($constname, @_ ? $_[0] : 0);
-    if ($! != 0) 
-    {
+    if ($! != 0) {
 	    croak "Your vendor has not defined Sys::Utmp macro $constname";
     }
     {
-	no strict 'refs';
-	*{$AUTOLOAD} = sub { $val };
+	    no strict 'refs';
+	    *{$AUTOLOAD} = sub { $val };
     }
     goto &$AUTOLOAD;
 }
