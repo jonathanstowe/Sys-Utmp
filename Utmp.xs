@@ -6,6 +6,7 @@
 #define USEXFUNCS 1
 #define _HAVE_UTMPXNAME 1
 #define _HAVE_UT_TV 1
+#undef BSD
 #else
 #if __FreeBSD__ >= 10
 #include <utmpx.h>
