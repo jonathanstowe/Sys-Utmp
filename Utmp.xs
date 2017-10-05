@@ -1,8 +1,27 @@
 #include "EXTERN.h"
 #include "perl.h"
 #include "XSUB.h"
-
+#ifdef __NetBSD__
+#include <utmpx.h>
+#define USEXFUNCS 1
+#define _HAVE_UTMPXNAME 1
+#define _HAVE_UT_TV 1
+#else
+#if __FreeBSD__ >= 10
+#include <utmpx.h>
+#define USEXFUNCS 1
+#define _HAVE_UT_TV 1
+#else
+#include <stdint.h>
 #include <utmp.h>
+
+#ifdef __FreeBSD_cc_version
+#define BSD 1
+#define NOUTFUNCS 1
+#endif
+#endif
+#endif
+
 
 #ifdef _AIX
 #define _HAVE_UT_HOST    1
@@ -178,7 +197,11 @@ SV *self
      static IV _ut_type;
      static SV *ut_ref;
      static char *_ut_id;
+#ifdef USEXFUNCS
+     static struct utmpx *utent;
+#else
      static struct utmp *utent;
+#endif
      static char ut_host[sizeof(utent->ut_host)];
 
 
@@ -192,9 +215,12 @@ SV *self
 
      if(!SvROK(self))
         croak("Must be called as an object method");
-
-
+#ifdef USEXFUNCS
+     utent = getutxent();
+#else
      utent = getutent();
+#endif
+
 
      if ( utent ) {
 #ifdef _NO_UT_ID
@@ -286,8 +312,11 @@ SV *self
 
     if(!SvROK(self))
         croak("Must be called as an object method");
-
+#ifdef USEXFUNCS
+    setutxent();
+#else
     setutent();
+#endif
 
 void
 endutent(self)
@@ -296,7 +325,12 @@ SV *self
 
     if(!SvROK(self))
         croak("Must be called as an object method");
+#ifdef USEXFUNCS
+    endutxent();
+#else
     endutent();
+#endif
+
 
 void
 utmpname(self, filename)
@@ -309,7 +343,16 @@ SV *filename
         croak("Must be called as an object method");
 
      ff = SvPV(filename,PL_na);
-     utmpname(ff);
+#ifdef USEXFUNCS
+#ifdef _HAVE_UTMPXNAME
+     utmpxname(ff);
+#else
+     setutxdb(UTXDB_ACTIVE,ff);
+#endif
+#else
+     utmpname(filename);
+#endif
+
 
 void
 DESTROY(self)
@@ -318,5 +361,9 @@ SV *self
 
     if(!SvROK(self))
         croak("Must be called as an object method");
+#ifdef USEXFUNCS
+    endutxent();
+#else
+    endutent();
+#endif
 
-     endutent();
